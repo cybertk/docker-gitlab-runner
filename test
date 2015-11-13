@@ -41,3 +41,8 @@ assertMatch "xxxxxx Registering runner... forbidden (check registration token)" 
 
 assertMatch "gitlab-ci-multi-runner version 0.6.2 (3227f0a)" \
     docker run --rm --entrypoint=gitlab-ci-multi-runner quanlong/gitlab-runner --version
+
+# Test volume is exported at /etc/gitlab-runner
+docker run --entrypoint=/bin/touch --name gitlab-test-volume quanlong/gitlab-runner /etc/gitlab-runner/config.toml
+assert docker run --rm --volumes-from=gitlab-test-volume alpine cat /etc/gitlab-runner/config.toml
+docker rm -f gitlab-test-volume

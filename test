@@ -1,0 +1,36 @@
+#!/bin/bash
+
+OUTPUT=/tmp/docker-gitlab-runner-test
+
+assert()
+{
+    echo "assert: '$@'"
+
+    eval "$@"
+    if [ $? -ne 0 ];
+    then
+        echo "test failed: '$@'"
+        exit 1
+    fi
+}
+
+# stdout of $2.. should matches $1
+assertMatch()
+{
+    local pattern=$1
+    shift
+
+    echo "assertMatch: '$pattern' of '$@'"
+
+    eval "$@" 2>&1 | tee $OUTPUT
+    if ! grep -q "$pattern" $OUTPUT;
+    then
+        echo "test failed: '$@'"
+        exit 1
+    fi
+}
+
+assert docker build -t quanlong/gitlab-runner:latest .
+
+assertMatch "xxxxxx Registering runner... forbidden (check registration token)" \
+    docker run -e "CI_SERVER_URL=https://gitlab.com/ci" -e "REGISTRATION_TOKEN=xxxxxx" quanlong/gitlab-runner

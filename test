@@ -36,10 +36,10 @@ assertMatch()
 
 assert docker build -t quanlong/gitlab-runner:latest .
 
-assertMatch "xxxxxx Registering runner... forbidden (check registration token)" \
-    docker run --rm -e "CI_SERVER_URL=https://gitlab.com/ci" -e "REGISTRATION_TOKEN=xxxxxx" quanlong/gitlab-runner
+assertMatch "Registering runner... forbidden (check registration token)" \
+    docker run --rm -e "CI_SERVER_URL=https://gitlab.com" -e "REGISTRATION_TOKEN=xxxxxx" quanlong/gitlab-runner
 
-assertMatch "gitlab-ci-multi-runner version 0.6.2 (3227f0a)" \
+assertMatch "Version:      11.1.0" \
     docker run --rm --entrypoint=gitlab-ci-multi-runner quanlong/gitlab-runner --version
 
 # Test volume is exported at /etc/gitlab-runner

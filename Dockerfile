@@ -1,8 +1,6 @@
-FROM gitlab/gitlab-runner:alpine
+FROM gitlab/gitlab-runner:alpine-v11.1.0
 
 MAINTAINER Quanlong <kyan.ql.he@gmail.com>
-
-WORKDIR /home/gitlab-runner
 
 ENV CONFIG_FILE=/etc/gitlab-runner/config.toml
 
